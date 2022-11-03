@@ -13,6 +13,10 @@ namespace HelloWorld
             var player = new Player();
             player.setPosition(new Vector3(0,0,0));
             scene.Add(player); 
+
+
+            var map = new Map();
+            scene.Add(map);
             Camera3D camera = new Camera3D
             {
                 position = new Vector3(0.0f, 10.0f, 10.0f), // Camera position
@@ -38,7 +42,7 @@ namespace HelloWorld
                 Raylib.ClearBackground(Color.WHITE);
                 Raylib.BeginMode3D(camera);
                 foreach (var actor in scene) {
-                  Raylib.DrawModel(actor.model, actor.position, 1f, Color.RAYWHITE);
+                  Raylib.DrawModel(actor.model, actor.position, 1f, actor.color);
                 }
                 Raylib.EndMode3D();
                 Raylib.DrawFPS(10, 10);
