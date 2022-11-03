@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Examples;
 using Raylib_cs;
 
 namespace HelloWorld
@@ -8,14 +9,33 @@ namespace HelloWorld
         public static void Main()
         {
             List<Actor> scene = new List<Actor>();
-            Raylib.InitWindow(500, 480, "Hello World");
+            Raylib.InitWindow(1280, 720, "Hello World");
             Raylib.SetTargetFPS(60);
             var player = new Player();
             player.setPosition(new Vector3(0,0,0));
-            scene.Add(player); 
+            scene.Add(player);
 
+            // load lightning shader
+            var shader = Raylib.LoadShader("lighting.vs", "lighting.fs");
+            unsafe
+            {
+                shader.locs[(int)ShaderLocationIndex.SHADER_LOC_VECTOR_VIEW] = Raylib.GetShaderLocation(shader, "viewPos");
+            }
+            
+            // set ambient lightning
+            var ambientLoc = Raylib.GetShaderLocation(shader, "ambient");
+            Raylib.SetShaderValue(shader, ambientLoc, new float[] {0.1f, 0.1f, 0.1f, 1f}, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+
+            // create lights (max 4 per scene with this shit shader)
+            var lights = new Light[4];
+            lights[0] = Rlights.CreateLight(0, LightType.LIGHT_POINT, new Vector3(-2, 1, -2), Vector3.Zero, Color.PINK, shader);
 
             var map = new Map();
+            unsafe
+            {
+                player.model.materials[0].shader = shader;
+                map.model.materials[0].shader = shader;
+            }
             scene.Add(map);
             Camera3D camera = new Camera3D
             {
