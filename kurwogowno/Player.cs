@@ -6,6 +6,7 @@ namespace HelloWorld {
     public Player() {
       this.name = "player";
       this.model = Raylib.LoadModel("quadrocopter.obj");
+      this.color = Color.RAYWHITE;
     }  
     public override void Update(float dt) {
       this.move(new Vector3(0,0,-dt));

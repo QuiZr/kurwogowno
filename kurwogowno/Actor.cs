@@ -4,6 +4,7 @@ using Raylib_cs;
 namespace HelloWorld { 
   abstract class Actor {
     public Model model; 
+    public Color color; 
     public string name;
     public virtual void Update(float delta) {}
     public void setPosition(Vector3 position) {
