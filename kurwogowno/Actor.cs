@@ -6,6 +6,12 @@ namespace HelloWorld {
     public Model model; 
     public Color color; 
     public string name;
+
+    public Vector3 position;
+    public Vector3 rotationAxis;
+    public float rotationAngle;
+
+
     public virtual void Update(float delta) {}
     public void setPosition(Vector3 position) {
       this.position = position;
@@ -13,6 +19,5 @@ namespace HelloWorld {
     public void move(Vector3 position) {
       this.position += position;
     }
-    public Vector3 position;
   }
 }

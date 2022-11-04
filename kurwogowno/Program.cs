@@ -62,7 +62,7 @@ namespace HelloWorld
                 Raylib.ClearBackground(Color.WHITE);
                 Raylib.BeginMode3D(camera);
                 foreach (var actor in scene) {
-                  Raylib.DrawModel(actor.model, actor.position, 1f, actor.color);
+                  Raylib.DrawModelEx(actor.model, actor.position, actor.rotationAxis, actor.rotationAngle, new Vector3(1f, 1f, 1f), actor.color);
                 }
                 Raylib.EndMode3D();
                 Raylib.DrawFPS(10, 10);

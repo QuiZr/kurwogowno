@@ -7,6 +7,7 @@ namespace HelloWorld {
       this.name = "map";
       this.model = Raylib.LoadModel("map.obj");
       this.color = Color.GREEN;
+
     }  
     public override void Update(float dt) {
     }
