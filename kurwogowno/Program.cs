@@ -39,9 +39,9 @@ namespace HelloWorld
             scene.Add(map);
             Camera3D camera = new Camera3D
             {
-                position = new Vector3(0.0f, 10.0f, 10.0f), // Camera position
+                position = new Vector3(15.0f, 15.0f, 0.0f), // Camera position
                 target = new Vector3(0.0f, 0.0f, 0.0f), // Camera looking at point
-                up = new Vector3(0.0f, 0f, -1.0f), // Camera up vector (rotation towards target)
+                up = new Vector3(0.0f, 0f, 1.0f), // Camera up vector (rotation towards target)
                 fovy = 45.0f, // Camera field-of-view Y
                 projection = CameraProjection.CAMERA_PERSPECTIVE // Camera mode type
             };
