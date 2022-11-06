@@ -1,23 +1,23 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace HelloWorld { 
+namespace kurwogowno { 
   abstract class Actor {
-    public Model model; 
-    public Color color; 
-    public string name;
+    public Model Model; 
+    public Color Color; 
+    public string Name;
 
-    public Vector3 position;
-    public Vector3 rotationAxis;
-    public float rotationAngle;
+    public Vector3 Position;
+    public Vector3 RotationAxis;
+    public float RotationAngle;
 
 
     public virtual void Update(float delta) {}
-    public void setPosition(Vector3 position) {
-      this.position = position;
+    public void SetPosition(Vector3 position) {
+      Position = position;
     }
-    public void move(Vector3 position) {
-      this.position += position;
+    public void Move(Vector3 position) {
+      Position += position;
     }
   }
 }

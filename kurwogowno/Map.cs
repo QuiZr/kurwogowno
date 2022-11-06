@@ -1,15 +1,17 @@
-using System.Numerics;
 using Raylib_cs;
 
-namespace HelloWorld {
-  class Map: Actor {
-    public Map() {
-      this.name = "map";
-      this.model = Raylib.LoadModel("map.obj");
-      this.color = Color.GREEN;
+namespace kurwogowno;
 
-    }  
-    public override void Update(float dt) {
+class Map : Actor
+{
+    public Map()
+    {
+        Name = "map";
+        Model = Raylib.LoadModel("map.obj");
+        Color = Color.GREEN;
     }
-  } 
+
+    public override void Update(float dt)
+    {
+    }
 }

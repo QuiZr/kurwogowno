@@ -58,18 +58,18 @@ namespace Examples
         public static void UpdateLightValues(Shader shader, Light light)
         {
             // Send to shader light enabled state and type
-            Raylib.SetShaderValue(shader, light.enabledLoc, light.enabled ? 1 : 0, SHADER_UNIFORM_INT);
-            Raylib.SetShaderValue(shader, light.typeLoc, (int)light.type, SHADER_UNIFORM_INT);
+            SetShaderValue(shader, light.enabledLoc, light.enabled ? 1 : 0, SHADER_UNIFORM_INT);
+            SetShaderValue(shader, light.typeLoc, (int)light.type, SHADER_UNIFORM_INT);
 
             // Send to shader light target position values
-            Raylib.SetShaderValue(shader, light.posLoc, light.position, SHADER_UNIFORM_VEC3);
+            SetShaderValue(shader, light.posLoc, light.position, SHADER_UNIFORM_VEC3);
 
             // Send to shader light target position values
-            Raylib.SetShaderValue(shader, light.targetLoc, light.target, SHADER_UNIFORM_VEC3);
+            SetShaderValue(shader, light.targetLoc, light.target, SHADER_UNIFORM_VEC3);
 
             // Send to shader light color values
             float[] color = new[] { (float)light.color.r / (float)255, (float)light.color.g / (float)255, (float)light.color.b / (float)255, (float)light.color.a / (float)255 };
-            Raylib.SetShaderValue(shader, light.colorLoc, color, SHADER_UNIFORM_VEC4);
+            SetShaderValue(shader, light.colorLoc, color, SHADER_UNIFORM_VEC4);
         }
     }
 }

@@ -1,72 +1,71 @@
 using System.Numerics;
 using Raylib_cs;
+using static Raylib_cs.GamepadAxis;
 using static Raylib_cs.Raylib;
 using static Raylib_cs.KeyboardKey;
 
 
-namespace HelloWorld {
-  class Player: Actor {
-    private Boolean antiGravity = false;
-    private Vector3 speedVector;
-    public Player() {
-      this.name = "player";
-      this.model = Raylib.LoadModel("quadrocopter.obj");
-      this.color = Color.RAYWHITE;
-    }  
-    public override void Update(float dt) {
+namespace kurwogowno;
 
-      this.rotationAxis = new Vector3(0,0,0);
-      if (IsKeyDown(KEY_UP)) {
-        this.rotationAngle = 45f;
-        rotationAxis.X = 1;
-      } else if (IsKeyDown(KEY_DOWN)) {
-        this.rotationAngle = 45f;
-        rotationAxis.X = -1;
-      }
-      if (IsKeyDown(KEY_LEFT)) {
-        this.rotationAngle = 45f;
-        rotationAxis.Y = 1;
-      } else if (IsKeyDown(KEY_RIGHT)) {
-        this.rotationAngle = 45f;
-        rotationAxis.Y = -1;
-      }
-      var rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(rotationAxis), deg2rad(rotationAngle));
-      var gravityVector = new Vector3(0,0,-0.98f);
-      var thrustVector = new Vector3(0,0,0);
-      if (IsKeyDown(KEY_A)) {
-        thrustVector += new Vector3(0,0,1.4f);
-      } else if (IsKeyDown(KEY_Z)) {
-        thrustVector += new Vector3(0,0,-1.4f);
-      }
-      if (rotationAxis.LengthSquared() > 0) {
-        thrustVector = Vector3.Transform(thrustVector, rotation);
-      }
-      if (thrustVector.LengthSquared() > 0) {
-        Console.WriteLine($"thrust: x: {thrustVector.X}, y: {thrustVector.Y}  z: {thrustVector.Z}");
-        speedVector += thrustVector*dt;
-      }
-      if (speedVector.LengthSquared() > 0) {
-        Console.WriteLine($"speed: x: {speedVector.X}, y: {speedVector.Y}  z: {speedVector.Z}");
-      }
+class Player : Actor
+{
+    private bool _antiGravity;
+    private Vector3 _speedVector;
 
-      if (IsKeyPressed(KEY_G)) {
-        this.antiGravity = !this.antiGravity;
-      }
-      if (!antiGravity) {
-        speedVector += gravityVector*dt;
-      }
-      var friction = speedVector*-.01f;
-      if (friction.LengthSquared() > 0) {
-        Console.WriteLine($"friction: x: {friction.X}, y: {friction.Y}  z: {friction.Z}");
-      }
-      speedVector += friction;
-      this.move(this.speedVector);
-
-
+    public Player()
+    {
+        Name = "player";
+        Model = LoadModel("quadrocopter.obj");
+        Color = Color.RAYWHITE;
     }
-    public static float deg2rad(float deg) {
-      return (deg * (float)Math.PI)/180f; 
-    }
-  } 
 
+    public override void Update(float dt)
+    {
+        RotationAxis = new Vector3(0, 0, 0);
+        var forwardsBackwardsInput = GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y);
+        var leftRightInput = GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X);
+
+        RotationAxis.X = forwardsBackwardsInput * -1;
+        RotationAxis.Y = leftRightInput * -1;
+        RotationAngle = (Math.Abs(forwardsBackwardsInput) + Math.Abs(leftRightInput)).Remap(0, 2, 0, 45);
+
+        var rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(RotationAxis), RotationAngle.Deg2Rad());
+        var gravityVector = new Vector3(0, 0, -0.98f);
+        var throttleMapped = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y).Remap(-1f, 1f, 1.4f, -1.4f);
+        var thrustVector = new Vector3(0, 0, throttleMapped);
+        if (RotationAxis.LengthSquared() > 0)
+        {
+            thrustVector = Vector3.Transform(thrustVector, rotation);
+        }
+
+        if (thrustVector.LengthSquared() > 0)
+        {
+            Console.WriteLine($"thrust: x: {thrustVector.X}, y: {thrustVector.Y}  z: {thrustVector.Z}");
+            _speedVector += thrustVector * dt;
+        }
+
+        if (_speedVector.LengthSquared() > 0)
+        {
+            Console.WriteLine($"speed: x: {_speedVector.X}, y: {_speedVector.Y}  z: {_speedVector.Z}");
+        }
+
+        if (IsKeyPressed(KEY_G) || IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_UP))
+        {
+            _antiGravity = !_antiGravity;
+        }
+
+        if (!_antiGravity)
+        {
+            _speedVector += gravityVector * dt;
+        }
+
+        var friction = _speedVector * -.01f;
+        if (friction.LengthSquared() > 0)
+        {
+            Console.WriteLine($"friction: x: {friction.X}, y: {friction.Y}  z: {friction.Z}");
+        }
+
+        _speedVector += friction;
+        Move(_speedVector);
+    }
 }
